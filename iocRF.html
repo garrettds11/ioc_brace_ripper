@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Reformatter</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    #inputText {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 10px;
+    }
+    #outputText {
+        width: 100%;
+        height: 200px;
+    }
+	#asciiart {
+		font-family: Courier, serif;
+	}
+
+</style>
+</head>
+<body>
+  <p id="asciiart">
+####_############____###______<br>
+###(_)___##_____/ __ \// ____/<br>
+##/ / __ \/ ___/ /_/ // /_####<br>
+#/ / /_/ / /__/ _, _// __/####<br>
+/_/\____/\___/_/#|_//_/#######</p>
+    <h1>Indicator of Compromise Re-Formatter</h1>
+    <p>Most IOCs are released in a format that prevents inadvertent navigation to the domain or IP address intel. It is often necessary to remove characters used to neutralize those strings, such as [braces].</p>
+	<h4>E.g. 192.168.254[.]2</h4>
+    <p>Step 1: Paste <u>line-delimited</u> data into the text area below.<br>Step 2: Choose a delimiter option to segment the output strings.<br>Step 3: Click Reformat button.</p>
+    <input type="radio" name="delimiter" value="space" checked> Space
+    <input type="radio" name="delimiter" value="comma"> Comma
+    <input type="radio" name="delimiter" value="newline"> Newline<br><br>
+    <textarea id="inputText" placeholder="Enter data strings here..."></textarea><br>
+    <button onclick="reformatData()">Reformat</button><br><br>
+    <textarea id="outputText" readonly></textarea>
+
+    <script>
+        function reformatData() {
+            var inputData = document.getElementById("inputText").value.trim(); // Remove trailing spaces
+            var delimiter = getSelectedDelimiter();
+            var reformattedData;
+
+            if (delimiter === "space") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' ');
+            } else if (delimiter === "comma") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',');
+            } else if (delimiter === "newline") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n');
+            }
+
+            document.getElementById("outputText").value = reformattedData;
+        }
+
+        function getSelectedDelimiter() {
+            var radios = document.getElementsByName("delimiter");
+
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].value;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
