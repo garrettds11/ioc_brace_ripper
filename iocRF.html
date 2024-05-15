@@ -8,19 +8,30 @@
     body {
         font-family: Arial, sans-serif;
     }
+    #asciiart {
+		font-family: Courier, serif;
+    }
     #inputText {
-        width: 100%;
+        width: 90%;
         height: 200px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
     #outputText {
-        width: 100%;
+        width: 90%;
         height: 200px;
+        margin-bottom: 30px;
     }
-	#asciiart {
-		font-family: Courier, serif;
-	}
-
+    @media screen {
+        span.cc {
+            font-family: 'CC-ICONS';
+            color: #ABB3AC;
+        }
+    }
+    .footer {
+        background-color: #f0f0f0;
+        padding: 30px;
+    }
+ 
 </style>
 </head>
 <body>
@@ -31,39 +42,104 @@
 #/ / /_/ / /__/ _, _// __/####<br>
 /_/\____/\___/_/#|_//_/#######</p>
     <h1>Indicator of Compromise Re-Formatter</h1>
-    <p>Most IOCs are released in a format that prevents inadvertent navigation to the domain or IP address intel. It is often necessary to remove characters used to neutralize those strings, such as [braces].<br>This tool will remove open and close braces from line-delimited strings.</p>
-	<h4>E.g. 192.168.254[.]2<br>www.google[.]com</h4>
-    <p>Step 1: Paste <u>line-delimited</u> data into the text area below.<br>Step 2: Choose a delimiter option to segment the output strings.<br>Step 3: Click Reformat button to remove brace characters.</p>
-    <input type="radio" name="delimiter" value="space" checked> Space
-    <input type="radio" name="delimiter" value="comma"> Comma
-    <input type="radio" name="delimiter" value="newline"> Newline<br><br>
+    <p>Most IOCs are released in a format that prevents inadvertent navigation to the domain or IP address intel. It is often necessary to remove characters used to neutralize those strings, such as [braces].<br>This tool will remove the open and close brace characters.</p>
+               <p><b>Examples</b><br>
+               <i>192.168.254[.]2<br>www.google[.]com</i></p>
+    <p>Step 1: Paste <u>line-delimited</u> data into the text area below.<br>Step 2: Choose a delimiter option to segment the output strings.<br>Step 3: Click Reformat button to remove any braces.</p>
+    <!--
+               <p><b>Input Datatype</b><br>
+               <input type="radio" name="datatype" value="ipv4"> IPv4
+    <input type="radio" name="datatype" value="domain"> Domain
+    <input type="radio" name="datatype" value="email"> Email
+    <input type="radio" name="datatype" value="hash"> Hash<br></p>
+               -->
+    <p><b>Output Delimiters</b><br>
+	    <input type="radio" name="delimiter" value="space" checked> Space
+	    <input type="radio" name="delimiter" value="comma"> Comma
+	    <input type="radio" name="delimiter" value="newline"> Newline<br></p>
+    <p><b>Output Wildcards</b><br>
+		<input type="radio" name="wildcard" value="none" checked> None
+		<input type="radio" name="wildcard" value="prepend"> Prepend
+		<input type="radio" name="wildcard" value="append"> Append
+		<input type="radio" name="wildcard" value="both"> Both</p>
     <textarea id="inputText" placeholder="Enter data strings here..."></textarea><br>
-    <button onclick="reformatData()">Reformat</button><br><br>
+    <button onclick="reformatData()">Reformat</button>
+    <button onclick="refreshPage()">Refresh Page(F5)</button><br><br>
     <textarea id="outputText" readonly></textarea>
-
+   <div class="footer">
+	    <p>This page is licensed under <span class="cc">Creative Commons 1.0, CC BY 1.0 Deed</span> &copy; Garrett Spear</p>
+   </div>
+              
     <script>
         function reformatData() {
             var inputData = document.getElementById("inputText").value.trim(); // Remove trailing spaces
             var delimiter = getSelectedDelimiter();
+            var wildcard = getSelectedWildcard();
             var reformattedData;
-
-            if (delimiter === "space") {
+ 
+            if (delimiter === "space" && wildcard === "none") {
                 reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' ');
-            } else if (delimiter === "comma") {
+            } else if (delimiter === "space" && wildcard === "prepend") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' *');
+            } else if (delimiter === "space" && wildcard === "append") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '* ');
+            } else if (delimiter === "space" && wildcard === "both") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '* *');
+            } else if (delimiter === "comma" && wildcard === "none") {
                 reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',');
-            } else if (delimiter === "newline") {
+            } else if (delimiter === "comma" && wildcard === "prepend") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',*');
+            } else if (delimiter === "comma" && wildcard === "append") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*,');
+            } else if (delimiter === "comma" && wildcard === "both") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*,*');
+            } else if (delimiter === "newline" && wildcard === "none") {
                 reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n');
+            } else if (delimiter === "newline" && wildcard === "prepend") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n*');
+            } else if (delimiter === "newline" && wildcard === "append") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*\n');
+            } else if (delimiter === "newline" && wildcard === "both") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*\n*');
             }
-
+ 
+            if (wildcard === "prepend") {
+                // Prepend asterisk to first line
+                reformattedData = reformattedData.split('\n').map(line => '*' + line).join('\n');
+            } else if (wildcard === "append") {
+                // Append asterisk to last line
+                reformattedData = reformattedData.split('\n').map(line => line + '*').join('\n');
+			} else if (wildcard === "both") {
+                // Enclose output with asterisks
+                reformattedData = reformattedData.split('\n').map(line => '*' + line + '*').join('\n');
+			} else if (wildcard === "none") {
+                // Prepend asterisk to each line
+                reformattedData = reformattedData.split('\n').map(line => line).join('\n');
+			}
+ 
             document.getElementById("outputText").value = reformattedData;
         }
-
+ 
+        function refreshPage() {
+            location.reload();
+        }
+ 
         function getSelectedDelimiter() {
-            var radios = document.getElementsByName("delimiter");
-
-            for (var i = 0; i < radios.length; i++) {
-                if (radios[i].checked) {
-                    return radios[i].value;
+            var delimiters = document.getElementsByName("delimiter");
+ 
+            for (var i = 0; i < delimiters.length; i++) {
+                if (delimiters[i].checked) {
+                    return delimiters[i].value;
+                }
+            }
+        }
+ 
+        function getSelectedWildcard() {
+            var wildcards = document.getElementsByName("wildcard");
+ 
+            for (var i = 0; i < wildcards.length; i++) {
+                if (wildcards[i].checked) {
+                    return wildcards[i].value;
                 }
             }
         }
