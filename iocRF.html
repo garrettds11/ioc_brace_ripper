@@ -78,44 +78,43 @@
             var reformattedData;
  
             if (delimiter === "space" && wildcard === "none") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' ');
-            } else if (delimiter === "space" && wildcard === "prepend") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' *');
-            } else if (delimiter === "space" && wildcard === "append") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '* ');
-            } else if (delimiter === "space" && wildcard === "both") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '* *');
-            } else if (delimiter === "comma" && wildcard === "none") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',');
-            } else if (delimiter === "comma" && wildcard === "prepend") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',*');
-            } else if (delimiter === "comma" && wildcard === "append") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*,');
-            } else if (delimiter === "comma" && wildcard === "both") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*,*');
-            } else if (delimiter === "newline" && wildcard === "none") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n');
-            } else if (delimiter === "newline" && wildcard === "prepend") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n*');
-            } else if (delimiter === "newline" && wildcard === "append") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*\n');
-            } else if (delimiter === "newline" && wildcard === "both") {
-                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*\n*');
-            }
- 
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' ');}
+            else if (delimiter === "space" && wildcard === "prepend") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ' *');}
+            else if (delimiter === "space" && wildcard === "append") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '* ');}
+            else if (delimiter === "space" && wildcard === "both") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '* *');}
+            else if (delimiter === "comma" && wildcard === "none") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',');}
+            else if (delimiter === "comma" && wildcard === "prepend") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, ',*');}
+            else if (delimiter === "comma" && wildcard === "append") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*,');}
+            else if (delimiter === "comma" && wildcard === "both") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*,*');}
+            else if (delimiter === "newline" && wildcard === "none") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n');}
+            else if (delimiter === "newline" && wildcard === "prepend") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '\n*');}
+            else if (delimiter === "newline" && wildcard === "append") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*\n');}
+            else if (delimiter === "newline" && wildcard === "both") {
+                reformattedData = inputData.replace(/\[\.\]/g, ".").replace(/[\s,]+/g, '*\n*');}
+
+
             if (wildcard === "prepend") {
                 // Prepend asterisk to first line
-                reformattedData = reformattedData.split('\n').map(line => '*' + line).join('\n');
-            } else if (wildcard === "append") {
+                reformattedData = reformattedData.split('\n').map(line => '*' + line).join('\n');}
+            else if (wildcard === "append") {
                 // Append asterisk to last line
-                reformattedData = reformattedData.split('\n').map(line => line + '*').join('\n');
-			} else if (wildcard === "both") {
+                reformattedData = reformattedData.split('\n').map(line => line + '*').join('\n');}
+            else if (wildcard === "both") {
                 // Enclose output with asterisks
-                reformattedData = reformattedData.split('\n').map(line => '*' + line + '*').join('\n');
-			} else if (wildcard === "none") {
+                reformattedData = reformattedData.split('\n').map(line => '*' + line + '*').join('\n');}
+            else if (wildcard === "none") {
                 // Prepend asterisk to each line
-                reformattedData = reformattedData.split('\n').map(line => line).join('\n');
-			}
+                reformattedData = reformattedData.split('\n').map(line => line).join('\n');}
  
             document.getElementById("outputText").value = reformattedData;
         }
